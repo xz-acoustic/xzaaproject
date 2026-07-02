@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interaktif: Hancurkan Kaca & Kejutan Kado</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="icon" href="img/flowers.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="icon" href="../img/flowers.png" type="image/x-icon">
     
     <style>
         * {
@@ -162,7 +162,7 @@
         <canvas id="simulationCanvas"></canvas>
     </div>
 
-    <button id="backToLoveBtn" onclick="window.location.href='./index.html?show=love'" type="button" aria-label="Back to love menu">← Kembali</button>
+    <button id="backToLoveBtn" onclick="window.location.href='../index.html?show=love'" type="button" aria-label="Back to love menu">← Kembali</button>
 
     <div class="gift-overlay" id="giftOverlay">
         <div class="ask-box" id="askBox">
@@ -386,7 +386,7 @@
       </div>
     </div>
     
-    <script src="main.js"></script>
+    <script src="../js/main.js"></script>
 
     <script>
         const canvas = document.getElementById('simulationCanvas');
@@ -418,7 +418,7 @@
         // ============================================================
         // LOGIKA AUDIO: BRUNO.MP3 HANYA COBA DIPUTAR PADA KLIK PERTAMA
         // ============================================================
-        const crackSound = new Audio('bruno.mp3');
+        const crackSound = new Audio('../audio/bruno.mp3');
         let isAudioPlayed = false; // Penanda agar audio hanya terpicu sekali
 
         function playCrackSound() {

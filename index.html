@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>xzaa'boyfie ✨</title>
-    <link rel="stylesheet" href="./xzaaco_styles.css">
+    <link rel="stylesheet" href="css/xzaaco_styles.css">
 </head>
 <body>
 
@@ -298,7 +298,7 @@
                     setTimeout(() => {
                         // tanda supaya bruno.mp3 tetap jalan sampai index.html
                         try { window.__brunoController?.markPlayIntent?.(); } catch (e) {}
-                        window.location.href = './xzanew.html';
+                        window.location.href = 'html/xzanew.html';
                     }, 250);
                     return;
                 }
@@ -308,7 +308,7 @@
                     playSound('pop');
                     document.body.style.opacity = '0.2';
                     setTimeout(() => {
-                        window.location.href = './cake.html';
+                        window.location.href = 'html/cake.html';
                     }, 250);
                     return;
                 }
@@ -470,7 +470,7 @@
             // Cache Image supaya tidak bikin objek baru tiap frame.
             if (!drawLove._img) {
                 drawLove._img = new Image();
-                drawLove._img.src = './ahosh.png';
+                drawLove._img.src = 'img/ahosh.png';
             }
             const img = drawLove._img;
 
