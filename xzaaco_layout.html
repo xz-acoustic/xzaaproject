@@ -1,0 +1,65 @@
+
+<!-- SCREEN 1: KUNCI PIN -->
+<div class="phone-screen" id="pinScreen">
+  <div class="header-zone">
+    <h1 id="title">Masukkin pin yaww</h1>
+    <p class="status-msg" id="statusMsg">Ayo tebak pinnya apa ✨</p>
+  </div>
+
+  <div class="pin-dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="keypad">
+    <button class="key" onclick="pressNum('1')">1</button>
+    <button class="key" onclick="pressNum('2')">2</button>
+    <button class="key" onclick="pressNum('3')">3</button>
+
+    <button class="key" onclick="pressNum('4')">4</button>
+    <button class="key" onclick="pressNum('5')">5</button>
+    <button class="key" onclick="pressNum('6')">6</button>
+
+    <button class="key" onclick="pressNum('7')">7</button>
+    <button class="key" onclick="pressNum('8')">8</button>
+    <button class="key" onclick="pressNum('9')">9</button>
+
+    <div class="key action"></div>
+    <button class="key" onclick="pressNum('0')">0</button>
+    <button class="key action" onclick="pressDelete()">Hapus</button>
+  </div>
+</div>
+
+<!-- SCREEN 2: PILIHAN LOVE BESAR -->
+<div class="love-screen" id="loveScreen">
+  <h2 class="love-title">Mau pilih yang mana</h2>
+
+  <div class="love-container">
+    <div class="big-love" onclick="clickBigLove(1)"></div>
+    <div class="big-love" onclick="clickBigLove(2)"></div>
+    <div class="big-love" onclick="clickBigLove(3)"></div>
+  </div>
+</div>
+
+<!-- SCREEN 3: MINIGAME CATCH LOVE -->
+<div id="gameContainer">
+  <div id="startScreen" class="screen">
+    <h1>TANGKAP HOSHI YA</h1>
+    <p>GESER KE KANAN KALO NDA KE KIRI <br />HARUS DAPET 17 HOSHI KALO MAU MENANG HEHEHE</p>
+    <button class="btn" onclick="startGame()">UDAH SIAP BLOM</button>
+  </div>
+
+  <div id="endScreen" class="screen hide">
+    <h1 id="endTitle">YASHHH, KEMREN NAPISS</h1>
+    <p id="endMessage">Skor Akhir: 17</p>
+    <div class="btn-group">
+      <button class="btn" onclick="startGame()">Mau main lagi kah??</button>
+      <button class="btn btn-home" onclick="backToHome()">Menu Utama (Home)</button>
+    </div>
+  </div>
+
+  <canvas id="gameCanvas" width="500" height="600"></canvas>
+</div>
+

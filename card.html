@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, napiss !</title>
+
+  <!-- This script pulls in Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- These are for the animations and photo gallery -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css" />
+
+  <!-- Google Fonts for the Anime look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Link to your new external CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <!-- IMPORTANT: Replace with a real image link after you upload it -->
+  <meta property="og:image" content="https://id.pinterest.com/pin/156500155802505093/">
+</head>
+<body>
+<!-- Canvas for the falling cherry blossoms -->
+<canvas id="sakura-canvas"></canvas>
+
+
+
+
+
+
+<!-- Section 1: Hero Welcome -->
+<header class="h-screen relative flex items-center justify-center text-white overflow-hidden">
+  <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-[-1]">
+    <source src="imageback.jpeg" type="image/jpeg">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+
+  <div class="text-center z-10 p-4" data-aos="fade-in" data-aos-duration="1500">
+    <h1 class="text-5xl md:text-7xl font-anime drop-shadow-lg">Happy Birthday, Napiss !</h1>
+    <p class="mt-4 text-xl font-semibold">may all your dreams come true this year, starting with a perfect birtday</p>
+    <div id="countdown" class="mt-6 text-2xl font-semibold tracking-widest leading-relaxed"></div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto p-6 md:p-12">
+
+  <!-- Section 2: A Letter For You -->
+  <section class="my-16 md:my-24 max-w-3xl mx-auto text-center" data-aos="fade-up">
+    <h2 class="text-4xl md:text-5xl font-anime text-sakura mb-8 drop-shadow-sm">A Special Message For You</h2>
+    <div class="text-left text-lg leading-relaxed space-y-4 bg-white p-8 rounded-lg shadow-lg">
+      <!-- TODO: Write your personal letter here -->
+      <p>Hayyie NAPISSSS,</p>
+      <p>Hari ini hari yang spesial buat kamuuu. I just wanna say thank u very muchhh for being ma safe place, biggest supporter, the moment, and experience, everything we're been through. Keknya bener deh lagunya sal priadi yang ini "dikirim ke bumi, untuk orang-orang sepertiku." Sebenernya aku tu bingung mau bilang gimana, karna love language ku bukan words of affirmation, dan aku bukan penulis profesional. Maaf kalo kata-kataku terkesan berlebihan atau kurang enak dibaca. </p>
+      <p>Aku iseng bikin ini karna lucuuu hehe... Tapi aku cuma bisa bikin sebisaku, walaupun banyak trial and errornya, trus masih pake ai lah, pake template lah, tapi aku suka bikin iniii:) Makanya aku nda mau kamu liat project tugas negaraku ini sebelum selesai. Aku boong waktu bilang ini buat lomba, sebenernya aku nda mau bilang dulu, tapi nda bisa. Aku juga bingung, mo milih lagu apa sebenernya. Ada top 5 yang pengen aku masukkin ke sini, ada semua aku dirayakan, bergema sampai selamanya, kota ini tak sama tanpamu, terbuang dalam waktu, sama my lovenya westlife.</p>
+      <p>Awalnya aku mau pilih bergema sampai selamanya, karna aku keinget pas kamu nyanyi di kelas lain waktu itu wkwkwk. Trus klo pake kota ini tak sama tanpamu bingung, tapi cakep sebenernya, keinget waktu di Sriwedari abis dari Kopi Jenni wkwkwkwk. Aku keiinget Sore deh, kalo dengerin lagu terbuang dalam waktu. Klo my love sebenernya cocok juga si, karna aku suka lagunya, tapi akhirnya aku pilih ini, karna aku ngerasa lebih cocok aja wkwkwkwk.</p>
+      <p>Ini tu banyak minusnya siii, karna aku ga pro wkwkwkwk... Tapi akhirnya aku dah bisa wkwkwk, nda bobo seminggu ini, lebih deng, PRANKKKK. Aku tetep bobo kok wkwkwkwkw... Maw nambahin funny fotomu yang waktu di bebek anjay, eh Sanjay, trus waktu di Milknbutter, dst. tu nda jadiii, ntar malah merusak suasana wleee....</p>
+      <p>Intinya aku makasiiiiii banyak sama kamuu, kalo nda ada kamu mungkin keseharianku kalo ngampus cuma kuliah pulang kuliah pulang mulu. Tapi semenjak ada kamu tu aku ngerasa, ternyata ada ya yang sayang sama aku, ada yang mau nemenin aku, padahal aku moodyan, banyak maunya, egois, trus masi banyak lagi pokoknya. I was lucky enough ketemu sama kamu:) </p>
+      <p>Makasiii udah mau hadir di hidup ais yang random ini, dan kamu selalu nemenin aku selama 2 semester ini. Everything happened naturally, awalnya tu kita cuma manusia yang nda sengaja satu kelompok bareng wkwkwkwk... Aku pun kadang heran, kenapa dulu tu aku bisa sepercaya itu buat curhat sama orang lain, secara kita aja baru kenal, belum ada sebulan. Tapi ajaibnya kamu juga selalu dengerin ocehanku yang kadang nda jelas itu, makasi banyak karna mau jadi temen curhat ais:) Semoga kedepannya kita masih bisa bareng yaaa. Entah nantinya kita bakal sibuk sama kehidupan masing masing atau nanti beda kota, it's okayyy... Kita bisa ketemu lagi di versi kita yang paling baruuu.</p>
+      <p>Masi ada lagi, hehehehe. Kayaknya ini bakal jadi panjang, niatnya tuh ENGGAK GINIIII, hmzzzzz:p </p>
+      <p>Jangan ngerasa kayak yang waktu itu ya, aku nda suka. Di sini kita sama-sama berproses. Mungkin kamu pernah berpikir kalau yang bisa kamu andelin cuma kamu sendiri, tapi jangan pernah ngerasa sendirian. Sekarang kan ada aku, Pinjem kata-katamu yang tadi wkwkwk. If u need someone to talk, I'M HERE, and I always will be here.</p>
+      <p>Jangan semua sedihnya dipendem sendiri, karena kita kan jalaninnya berdua. Kalau kita jalaninnya berdua, sedihnya bakal lebih cepet ilang lhooo. Kalau cuma sendirian, jadinya lama, karena bebannya cuma ditanggung satu orang. Jangan merasa kalau kamu sendirian yaa. Kalau kamu mau cerita, lagi bingung, atau butuh bantuan, bilang aja ya. Nggak perlu sungkan. Selagi aku bisa, aku pasti bantu kamu kok.</p>
+      <p>Inget yaaa, HARUS INGETTTTT jangan merasa sendirian. Nanti aku juga sedih kalau kamu sedih :(</p>
+      <p>Pesan dari ais, lakuin apa yang kamu suka saat ini, buang rasa mager ato males itu. Kita cuma hidup sekali, sayang kalo masa mudanya malah mageran. Karna belum tentu belasan tahun atau puluhan tahun lagi kita bisa lakuin kegiatan yang bisa kita lakuin di masa muda, nikmatin semua prosesnya. Cobain semua yang kamu pengen atau suka, selagi nda memberatkan, GASSSS. Kamu mau kan masa mudanya penuh cerita? Kalo mau yuk wujud in:)</p>
+      <p>Malah lupa buat ngucapin birthdaynya, ais si, kebanyakan yapping. Selamat bertambah usia, napisss. Jadi di ulang tahunmu ini aku berharap semoga kamu selalu dikelilingi sama orang orang baik, jangan merasa kesepian juga yaaa. Jangan lupa dijaga kesehatannya, JANGAN BANYAK BEGADANG JUGA, katanya bobo jam 9 tapi malah lebih berapa ratus menit. Biar kita selalu sehat, trus beberapa tahun lagi biar kita bisa keliling Indonesia dengan keadaan yang sehat yawwww... </p>
+      <p>Semoga selalu diberi paniang umur, sehat selalu, selalu diberi kemudahan dan kebahagiaan buat segala urusan kamu, berkah terus di setiap harinya. Semoga segala hal buruk engga pernah muncul walaupun hanya dipikiran kamu. Semoga senyummu nda pernah pudar, happy terus pokoknyaaa. Semoga selalu begitu, hingga dua puluh, selanjutnya, dan seterusnya ;D</p>
+      <p>Jangan lupa juga buat berterima kasih ke dirimu sendiri, karena yang bikin kamu kuat ya dirimu sendiri. Sayangi dirimu lebih banyak dibanding kamu sayang ke orang lain. Kalau kamu nggak sayang sama dirimu sendiri, gimana kamu bisa kuat buat jalanin aktivitas sehari-hari? Nanti kalau ragamu cemburu terus sedih gimana? Nanti kamu nggak bisa ketemu aku lohhh.</p>
+      <p>Jadi, kamu harus bangga ya sama dirimu. Tetap jadi diri kamu sendiri ya. Semua orang punya kelebihan dan kekurangan masing-masing, jadi jangan bandingin diri kamu sama orang lain. Ingat, kesempurnaan cuma milik Allah. </p>
+      <p>Walaupun susah, tetap percaya sama dirimu sendiri. Jangan runtuhin rasa percaya dirimu gara-gara omongan orang lain. Anggap aja itu angin lewat, atau jadiin motivasi buat jadi lebih baik ke depannya. Percaya deh sama aku, afirmasi dirimu sendiri dengan kata-kata yang baik dan terus kasih motivasi buat jadi versi terbaik dari diri kamu. Pasti kamu bisa jadi lebih hebat, seperti apa yang selama ini kamu impiin. Inget lagi, DO IT FOR U, NOT THEM. Okayyyy</p>
+      <p>I want to see you at the top, becoming the person you've always wanted to be. I'll support you so loudly and proudly that you won't hear the voices of those who doubted you. Just know that I'm here for u, and I believe in u with all my heart. Be happy on your dayy :D</p>
+      <p>Kayanya kalo ku lanjutin semua bisa bikin artikel sii, jadi cukup sampai sini saja ya. Perjalanan kita masih puanjangg banget, semoga doa doa baik yang sudah tersampaikan maupun yang belum selalu menyertaimu sehari hari yaaa</p>
+      <p>Happy birthday againnn! THANK YOU FOR ALL THE LOVE AND COMFORT U GAVE ME :) Terima kasih sudah lahir di dunia dan ketemu aku disudut bumi ini, dan terima kasih juga buat mama papanya napiss. Senang bisa kenal sama kamu :D</p>
+      <p>Sebutin satu keinginanmu, nanti aku kabulin, tapi yang masih bisa dipikir secara logika, bales di chat aku pas udah selesai buka ini </p>
+      <p>     </p>
+      <p>     </p>
+      <p>made with love</p>
+      <p class="text-right mt-8">
+        aizz<br>
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 3: The Timeline -->
+  <section class="my-16 md:my-24">
+    <h2 class="text-4xl md:text-5xl font-anime text-center mb-12" data-aos="fade-up">our chapters</h2>
+    <div class="space-y-16">
+      <!-- Timeline Item 1 -->
+      <div class="flex flex-col md:flex-row items-center gap-8" data-aos="fade-right">
+        <!-- TODO: Replace with your photo -->
+        <img src="image1.jpeg" alt="Add photo 1" class="w-full md:w-1/2 rounded-lg shadow-xl border-4 border-white">
+        <div class="text-center md:text-left">
+          <!-- TODO: Customize the date and story -->
+          <h3 class="text-2xl font-anime text-sakura">pertama kita kenal:(</h3>
+          <p class="mt-2 text-lg">Kita awal kenal gara-gara tugas Pak Eka hehehe, bareng josjis:( kamngen. Sangat tida menyangka kalo bisa kenal kamu lewat tugas ini. Sepertinya aku harus berterima kasih ke Pak Eka deh, karna beliau kita jadi bareng.</p>
+            <br>
+        </div>
+      </div>
+      <!-- Timeline Item 2 -->
+      <div class="flex flex-col md:flex-row-reverse items-center gap-8" data-aos="fade-left">
+        <!-- TODO: Replace with your photo -->
+        <img src="image2.jpeg" alt="Add photo 2" class="w-full md:w-1/2 rounded-lg shadow-xl border-4 border-white">
+        <div class="text-center md:text-right">
+          <!-- TODO: Customize the date and story -->
+          <h3 class="text-2xl font-anime text-sakura">pertama kali kita main berdua</h3>
+          <p class="mt-2 text-lg">inget nda, waktu itu kita ngantri jajan di flavfour, bisa-bisanya kita deeptalk padahal baru kenal. Niatnya kan kita mau jajan bareng sama josjis kan, tapi pada nda bisaa :( jadi kita jajan berdua. Dan bisa-bisanya kita deeptalk lama buangetttt. Trus mampir ke nh buat sholat. Eh, aku penasaran deh, kenapa kamu tiba-tiba mau ngefotoin aku di nh. But it's okaiiii, lucu fotonya, siapa si yang ngefotoin?? tapi bajuku gembellll :D</p>
+         <br>
+        </div>
+      </div>
+      <!-- Timeline Item 3 (NEW) -->
+      <div class="flex flex-col md:flex-row items-center gap-8" data-aos="fade-right">
+        <img src="image3.jpeg" alt="Add photo 3" class="w-full md:w-1/2 rounded-lg shadow-xl border-4 border-white">
+        <div class="text-center md:text-left">
+          <h3 class="text-2xl font-anime text-sakura">makaciiii</h3>
+          <p class="mt-2 text-lg">hehehehe, padahal yang ngevent aku, tapi kamu ikutan bikin freebiesnya. Makaciiiii buanyakk:) Pasti ini pertama kalinya kamu ikutan kaya ginii?? Tapi ais mau ditemenin lagi klo ada eventttt, mau ya, ya, ya </p>
+         <br>
+        </div>
+      </div>
+      <!-- Timeline Item 4 (NEW) -->
+      <div class="flex flex-col md:flex-row-reverse items-center gap-8" data-aos="fade-left">
+        <img src="image4.jpeg" alt="Add photo4" class="w-full md:w-1/2 rounded-lg shadow-xl border-4 border-white">
+        <div class="text-center md:text-right">
+          <h3 class="text-2xl font-anime text-sakura">SUKA BANGETTTTTT</h3>
+          <p class="mt-2 text-lg">suka banget sama photo ini pweaseeee:( pertama kali kita photobooth berdua habis uas matkulnya Pak Relly. Maw pake seragam SMA lagiii, kamu sii ... sekolahnya jauh. Yeyyy, akhirnya ais ada patner photobooth. </p>
+            <br>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Your Favourite Photos of your loved Ones (NEW SECTION) -->
+  <section class="my-16 md:my-24">
+    <h2 class="text-4xl md:text-5xl font-anime text-center mb-12" data-aos="fade-up">Everything About u</h2>
+    <div class="relative">
+      <!-- Scroll Buttons -->
+      <button id="scroll-left-btn" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity opacity-0 md:opacity-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sakura" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+      </button>
+      <button id="scroll-right-btn" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition-opacity opacity-0 md:opacity-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sakura" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </button>
+
+      <!-- Scrollable Container -->
+      <div id="hall-of-fame-scroller" class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide p-4 -mx-4">
+        <div class="flex snap-x snap-mandatory gap-8">
+          <!--  Card 1 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="100">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="image5.jpeg" alt="image5.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">first gramed date? </h3>
+              <p class="mt-2">"LUCUUUU, HEHEHE, Buku pertama ais yang beli di gramed bareng kamuu”"</p>
+            </div>
+          </div>
+          <!--  Card 2 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="200">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="image6.jpeg" alt="image6.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">Nontonnn :D </h3>
+              <p class="mt-2">"Nonton film apa si namanya, bareng Sinta ugaa"</p>
+            </div>
+          </div>
+          <!--  Card 3 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="300">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="image7.jpeg" alt="image7.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">film yang kamu tunggu</h3>
+              <p class="mt-2">"Ini juga nonton bawrengg, tapi filmya kamu yang milih"</p>
+            </div>
+          </div>
+          <!--  Card 4 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="400">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="image8.jpeg" alt="image8.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">Sriwedari lagiii</h3>
+              <p class="mt-2">"Kali ini ke Sriwedari, padahal ada keluargamu di Solo"</p>
+            </div>
+          </div>
+          <!--  Card 5 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="500">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="image9.jpeg" alt="image9.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">Sriwedariiii</h3>
+              <p class="mt-2">"LUCU FOTONYAAAA, Aku sukaaa HEHEHEHE"</p>
+            </div>
+          </div>
+          <!-- Card 6 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="600">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="image10.jpeg" alt="image10.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">SUKA SAMA FOTO INIII :D~</h3>
+              <p class="mt-2">"KAMU DISINI LUCU BANGETTTTT, nda boleh mikir kaya gitu lagi yaa :( intinya susah seneng kita barengg :D "</p>
+            </div>
+          </div>
+          <!-- Card 7 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="600">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="img24.jpeg" alt="img24.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">cek mata :D</h3>
+              <p class="mt-2">"Abis nonton hehe, trus kamu maw tanya bisa cek mata ke kakak yang jaga hehehe"</p>
+            </div>
+          </div>
+          <!-- Card 8 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="600">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="img21.jpeg" alt="img21.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">i'm a princee hehe</h3>
+              <p class="mt-2">"LUCU BAMNGETTTT HEHEHEHE, SEMUANYA AKU SUKAA"</p>
+            </div>
+          </div>
+          <!-- Card 9 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="600">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="img26.jpeg" alt="img26.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">zoom msb</h3>
+              <p class="mt-2">"Kesiangan akuuu :( tapi gapapa kan hehe"</p>
+            </div>
+          </div>
+          <!-- Card 10 -->
+          <div class="snap-center flex-shrink-0 w-10/12 sm:w-1/2 md:w-1/3 lg:w-1/4" data-aos="fade-up" data-aos-delay="600">
+            <div class="bg-white p-6 rounded-lg shadow-lg text-center h-full">
+              <img src="img28.jpeg" alt="img28.jpeg" class="w-full h-80 object-cover rounded-md mb-4">
+              <h3 class="text-2xl font-anime text-sakura">macihhhh :( </h3>
+              <p class="mt-2">"Ais jompo soalnyaaa, kamsiaaaa"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: The Gallery -->
+  <section class="my-16 md:my-24">
+    <h2 class="text-4xl md:text-5xl font-anime text-center mb-12" data-aos="fade-up">FROM AIZZ</h2>
+    <p class="text-center text-lg -mt-8 mb-12">(Ini koleksi foto yang disimpen aizz)</p>
+    <div id="lightgallery" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <a href="img1.jpeg" data-aos="zoom-in" class="block w-full h-48 md:h-64">
+        <img src="img1.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="first photobooth">
+      </a>
+      <a href="img2.jpeg" data-aos="zoom-in" data-aos-delay="100" class="block w-full h-48 md:h-64">
+        <img src="img2.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="di Gatsu">
+      </a>
+      <a href="img3.jpeg" data-aos="zoom-in" data-aos-delay="200" class="block w-full h-48 md:h-64">
+        <img src="img3.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="12 Desember 2025">
+      </a>
+      <a href="img4.jpeg" data-aos="zoom-in" data-aos-delay="300" class="block w-full h-48 md:h-64">
+        <img src="img4.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="our highschool uniform">
+      </a>
+      <!-- Second Row of Photos -->
+      <a href="img5.jpeg" data-aos="zoom-in" data-aos-delay="400" class="block w-full h-48 md:h-64">
+        <img src="img5.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="Kita main sehari hehe">
+      </a>
+      <a href="img6.jpeg" data-aos="zoom-in" data-aos-delay="500" class="block w-full h-48 md:h-64">
+        <img src="img6.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="pasar malem Alkid">
+      </a>
+      <a href="img7.jpeg" data-aos="zoom-in" data-aos-delay="600" class="block w-full h-48 md:h-64">
+        <img src="img7.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="akhirnya photobooth pake pdh">
+      </a>
+      <a href="img8.jpeg" data-aos="zoom-in" data-aos-delay="700" class="block w-full h-48 md:h-64">
+        <img src="img8.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="di depan Pasar Gedhe">
+      </a>
+      <!-- Third Row of Photos -->
+      <a href="img9.jpeg" data-aos="zoom-in" data-aos-delay="800" class="block w-full h-48 md:h-64">
+        <img src="img9.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="ambil baju di pakuwonnn">
+      </a>
+      <a href="img10.jpeg" data-aos="zoom-in" data-aos-delay="900" class="block w-full h-48 md:h-64">
+        <img src="img10.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="main bareng Pak Relly">
+      </a>
+      <a href="img11.jpeg" data-aos="zoom-in" data-aos-delay="1000" class="block w-full h-48 md:h-64">
+        <img src="img11.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="nyobain salt bread">
+      </a>
+      <a href="img12.jpeg" data-aos="zoom-in" data-aos-delay="1100" class="block w-full h-48 md:h-64">
+        <img src="img12.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="timezone at Pakuwon">
+      </a>
+      <!-- Fourth Row of Photos -->
+      <a href="img13.jpeg" data-aos="zoom-in" data-aos-delay="800" class="block w-full h-48 md:h-64">
+        <img src="img13.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="after ngajar">
+      </a>
+      <a href="img14.jpeg" data-aos="zoom-in" data-aos-delay="900" class="block w-full h-48 md:h-64">
+        <img src="img14.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="di Taman Lansia">
+      </a>
+      <a href="img15.jpeg" data-aos="zoom-in" data-aos-delay="1000" class="block w-full h-48 md:h-64">
+        <img src="img15.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="lucu bukunyaaa">
+      </a>
+      <a href="img16.jpeg" data-aos="zoom-in" data-aos-delay="1100" class="block w-full h-48 md:h-64">
+        <img src="img16.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="kekenyangan makan salt bread">
+      </a>
+      <!-- Fifth Row of Photos -->
+      <a href="img17.jpeg" data-aos="zoom-in" data-aos-delay="800" class="block w-full h-48 md:h-64">
+        <img src="img17.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="mc dadakan hehehe">
+      </a>
+      <a href="img18.jpeg" data-aos="zoom-in" data-aos-delay="900" class="block w-full h-48 md:h-64">
+        <img src="img18.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="gemeshh frame maung">
+      </a>
+      <a href="img19.jpeg" data-aos="zoom-in" data-aos-delay="1000" class="block w-full h-48 md:h-64">
+        <img src="img19.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="kondangan at Kopken">
+      </a>
+      <a href="img20.jpeg" data-aos="zoom-in" data-aos-delay="1100" class="block w-full h-48 md:h-64">
+        <img src="img20.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="di Momoyo">
+      </a>
+      <!-- Sixth Row of Photos -->
+      <a href="img25.jpeg" data-aos="zoom-in" data-aos-delay="800" class="block w-full h-48 md:h-64">
+        <img src="img25.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="first time kita ke gramed bareng">
+      </a>
+      <a href="img22.jpeg" data-aos="zoom-in" data-aos-delay="900" class="block w-full h-48 md:h-64">
+        <img src="img22.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="adekku cepu huhhhh">
+      </a>
+      <a href="img23.jpeg" data-aos="zoom-in" data-aos-delay="1000" class="block w-full h-48 md:h-64">
+        <img src="img23.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="main sebelum matkulnya Pak Relly">
+      </a>
+      <a href="img27.jpeg" data-aos="zoom-in" data-aos-delay="1100" class="block w-full h-48 md:h-64">
+        <img src="img27.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="abis zoom matkulnya Bu Ratna di Fore, geser kesini">
+      </a>
+      <!-- Seventh Row of Photos -->
+      <a href="img29.jpeg" data-aos="zoom-in" data-aos-delay="800" class="block w-full h-48 md:h-64">
+        <img src="img29.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="gemesh liat kamu jadi ekstrovert hehehe">
+      </a>
+      <a href="img30.jpeg" data-aos="zoom-in" data-aos-delay="900" class="block w-full h-48 md:h-64">
+        <img src="img30.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="kenapa kita nda foto hmzzz?">
+      </a>
+      <a href="img31.jpeg" data-aos="zoom-in" data-aos-delay="1000" class="block w-full h-48 md:h-64">
+        <img src="img31.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt=":( anggaaaa">
+      </a>
+      <a href="img32.jpeg" data-aos="zoom-in" data-aos-delay="1100" class="block w-full h-48 md:h-64">
+        <img src="img32.jpeg" class="rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 w-full h-full object-cover border-4 border-white" alt="lucuuu, abis bantuin bikin freebies">
+      </a>
+    </div>
+  </section>
+
+    <!-- Section 6: Finale -->
+    <section class="my-16 md:my-24" data-aos="fade-up">
+        <h2 class="text-4xl md:text-5xl font-anime text-center mb-4">HAPPY BIRTHDAY SAYANGKUUU(˶ᵔ ᵕ ᵔ˶) ♡ </h2>
+        <div class="max-w-4xl mx-auto rounded-lg shadow-2xl overflow-hidden bg-navy">
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-navy text-white p-8 text-center">
+  <p>Have a wonderfull and blessed birtday</p>
+  <p class="text-sm opacity-70 mt-2">Hope you liked it...</p>
+</footer>
+
+<!-- These scripts are for the animations and photo gallery -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+
+<!-- Link to your new external JavaScript file -->
+  <script src="script.js"></script>
+
+</body>
+</html>

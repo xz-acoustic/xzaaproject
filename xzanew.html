@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interaktif: Hancurkan Kaca & Kejutan Kado</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="img/flowers.png" type="image/x-icon">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #backToLoveBtn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 30;
+            display: none;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            background: rgba(255, 20, 147, 0.95);
+            color: #fff;
+            font-weight: 800;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.35);
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        #backToLoveBtn:hover { transform: scale(1.06); background: rgba(224, 17, 121, 0.98); }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff1493;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.7);
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        #hit-counter {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 20, 147, 0.5);
+            font-size: 0.9rem;
+            z-index: 10;
+            pointer-events: none;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        /* ============================================================
+           STYLING POP-UP BOX PILIHAN KADO
+           ============================================================ */
+        .gift-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .gift-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .ask-box {
+            background: linear-gradient(135deg, #fff5f5, #fff);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+            border: 2px solid #ff69b4;
+            max-width: 90%;
+            width: 340px;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .ask-box h3 {
+            color: #d81b60;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            align-items: center;
+        }
+        .btn-choice {
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-mau {
+            background-color: #ff1493;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 20, 147, 0.4);
+        }
+        .btn-mau:hover {
+            transform: scale(1.05);
+            background-color: #e01179;
+        }
+        .btn-gamau {
+            background-color: #e0e0e0;
+            color: #555;
+        }
+
+        /* Menyembunyikan elemen bunga di awal */
+        .night, .flowers {
+            display: none;
+        }
+    </style>
+</head>
+<body class="container">
+
+    <div id="wrapper-sim">
+        <div id="ui-overlay">✦ KETUK 7 KALI BIAR KACANYA PECAH ✦</div>
+        <div id="hit-counter">⚡ 0 / 7</div>
+        <canvas id="simulationCanvas"></canvas>
+    </div>
+
+    <button id="backToLoveBtn" onclick="window.location.href='./index.html?show=love'" type="button" aria-label="Back to love menu">← Kembali</button>
+
+    <div class="gift-overlay" id="giftOverlay">
+        <div class="ask-box" id="askBox">
+            <h3>Kamu mau kado ga? </h3>
+            <div class="btn-group">
+                <button class="btn-choice btn-mau" onclick="acceptGift()">Mau</button>
+                <button class="btn-choice btn-gamau" id="btnGamau" onclick="rejectGift()">Gamau</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="night" id="flowerNight"></div>
+    <div class="flowers" id="flowerContainer">
+      <div class="flower flower--1">
+        <div class="flower__leafs flower__leafs--1">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+          <div class="flower__line__leaf flower__line__leaf--5"></div>
+          <div class="flower__line__leaf flower__line__leaf--6"></div>
+        </div>
+      </div>
+  
+      <div class="flower flower--2">
+        <div class="flower__leafs flower__leafs--2">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+  
+      <div class="flower flower--3">
+        <div class="flower__leafs flower__leafs--3">
+          <div class="flower__leaf flower__leaf--1"></div>
+          <div class="flower__leaf flower__leaf--2"></div>
+          <div class="flower__leaf flower__leaf--3"></div>
+          <div class="flower__leaf flower__leaf--4"></div>
+          <div class="flower__white-circle"></div>
+          <div class="flower__light flower__light--1"></div>
+          <div class="flower__light flower__light--2"></div>
+          <div class="flower__light flower__light--3"></div>
+          <div class="flower__light flower__light--4"></div>
+          <div class="flower__light flower__light--5"></div>
+          <div class="flower__light flower__light--6"></div>
+          <div class="flower__light flower__light--7"></div>
+          <div class="flower__light flower__light--8"></div>
+        </div>
+        <div class="flower__line">
+          <div class="flower__line__leaf flower__line__leaf--1"></div>
+          <div class="flower__line__leaf flower__line__leaf--2"></div>
+          <div class="flower__line__leaf flower__line__leaf--3"></div>
+          <div class="flower__line__leaf flower__line__leaf--4"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:1.2s">
+        <div class="flower__g-long">
+          <div class="flower__g-long__top"></div>
+          <div class="flower__g-long__bottom"></div>
+        </div>
+      </div>
+  
+      <div class="growing-grass">
+        <div class="flower__grass flower__grass--1">
+          <div class="flower__grass--top"></div>
+          <div class="flower__grass--bottom"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
+          <div class="flower__grass__overlay"></div>
+        </div>
+      </div>
+  
+      <div class="growing-grass">
+        <div class="flower__grass flower__grass--2">
+          <div class="flower__grass--top"></div>
+          <div class="flower__grass--bottom"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--1"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--2"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--3"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--4"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--5"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--6"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--7"></div>
+          <div class="flower__grass__leaf flower__grass__leaf--8"></div>
+          <div class="flower__grass__overlay"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:2.4s">
+        <div class="flower__g-right flower__g-right--1">
+          <div class="leaf"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:2.8s">
+        <div class="flower__g-right flower__g-right--2">
+          <div class="leaf"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:2.8s">
+        <div class="flower__g-front">
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--1"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--2"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--3"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--4"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--5"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--6"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--7"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--8"><div class="flower__g-front__leaf"></div></div>
+          <div class="flower__g-front__line"></div>
+        </div>
+      </div>
+  
+      <div class="grow-ans" style="--d:3.2s">
+        <div class="flower__g-fr">
+          <div class="leaf"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--1"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--2"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--3"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--4"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--5"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--6"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--7"></div>
+          <div class="flower__g-fr__leaf flower__g-fr__leaf--8"></div>
+        </div>
+      </div>
+  
+      <div class="long-g long-g--0">
+        <div class="grow-ans" style="--d:3s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:2.2s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:3.4s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--1">
+        <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:3.8s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:4s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--2">
+        <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:4.4s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:4.6s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--3">
+        <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--4">
+        <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--5">
+        <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--6">
+        <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:4.4s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:4.6s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:4.8s"><div class="leaf leaf--3"></div></div>
+      </div>
+  
+      <div class="long-g long-g--7">
+        <div class="grow-ans" style="--d:3s"><div class="leaf leaf--0"></div></div>
+        <div class="grow-ans" style="--d:3.2s"><div class="leaf leaf--1"></div></div>
+        <div class="grow-ans" style="--d:3.5s"><div class="leaf leaf--2"></div></div>
+        <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
+      </div>
+    </div>
+    
+    <script src="main.js"></script>
+
+    <script>
+        const canvas = document.getElementById('simulationCanvas');
+        const ctx = canvas.getContext('2d');
+        const uiOverlay = document.getElementById('ui-overlay');
+        const hitCounter = document.getElementById('hit-counter');
+        const wrapperSim = document.getElementById('wrapper-sim');
+        
+        const giftOverlay = document.getElementById('giftOverlay');
+        const askBox = document.getElementById('askBox');
+        let boxScale = 1;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const mouse = { x: 0, y: 0, isHitting: false, angle: 0 };
+        let hitCount = 0;
+        const maxHits = 7;
+        let isShattered = false;
+
+        let crackPaths = [];
+        let shards = [];
+        let particles = [];
+
+        // ============================================================
+        // LOGIKA AUDIO: BRUNO.MP3 HANYA COBA DIPUTAR PADA KLIK PERTAMA
+        // ============================================================
+        const crackSound = new Audio('bruno.mp3');
+        let isAudioPlayed = false; // Penanda agar audio hanya terpicu sekali
+
+        function playCrackSound() {
+            // Jika status audio belum pernah diputar, jalankan fungsinya
+            if (!isAudioPlayed) {
+                crackSound.play().catch(error => {
+                    console.log("Audio diblokir otomatis oleh browser:", error);
+                });
+                isAudioPlayed = true; // Kunci status menjadi true agar klik berikutnya diabaikan
+            }
+        }
+
+        function generateCrackPath(cx, cy, angle, length, width, alpha, depth, maxDepth) {
+            const points = [{ x: cx, y: cy }];
+            const segments = 4 + Math.floor(Math.random() * 5);
+            const segLen = length / segments;
+            let x = cx, y = cy, currentAngle = angle;
+            const branches = [];
+
+            for (let i = 0; i < segments; i++) {
+                currentAngle += (Math.random() - 0.5) * 0.9;
+                x += Math.cos(currentAngle) * (segLen * (0.7 + Math.random() * 0.6));
+                y += Math.sin(currentAngle) * (segLen * (0.7 + Math.random() * 0.6));
+                points.push({ x, y });
+
+                if (depth < maxDepth && Math.random() < 0.28 - depth * 0.06) {
+                    const branchAngle = currentAngle + (Math.random() - 0.5) * 1.8;
+                    const sub = generateCrackPath(x, y, branchAngle, length * 0.35, width * 0.6, alpha * 0.8, depth + 1, maxDepth);
+                    branches.push(sub);
+                }
+            }
+            return { points, width, alpha, branches };
+        }
+
+        function createCrack(cx, cy, progress) {
+            const numMain = 4 + Math.floor(Math.random() * 4);
+            for (let i = 0; i < numMain; i++) {
+                const baseAngle = (Math.PI * 2 / numMain) * i;
+                const path = generateCrackPath(cx, cy, baseAngle, 120 * progress, 2, 0.8, 0, 2);
+                crackPaths.push(path);
+            }
+            for (let i = 0; i < 10; i++) particles.push(new Particle(cx, cy));
+        }
+
+        function createShatterEffect(cx, cy) {
+            const rows = 12, cols = 16;
+            const w = canvas.width / cols, h = canvas.height / rows;
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    shards.push(new Shard(c * w, r * h, w, h, cx, cy));
+                }
+            }
+            for (let i = 0; i < 100; i++) particles.push(new Particle(cx, cy, true));
+        }
+
+        class Particle {
+            constructor(x, y, high = false) {
+                this.x = x; this.y = y;
+                const speed = high ? 10 + Math.random() * 15 : 2 + Math.random() * 5;
+                const angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed - 2;
+                this.size = Math.random() * 3 + 1;
+                this.alpha = 1;
+                this.decay = 0.01 + Math.random() * 0.02;
+            }
+            update() { this.x += this.vx; this.y += this.vy; this.vy += 0.2; this.alpha -= this.decay; }
+            draw() {
+                if (this.alpha <= 0) return;
+                ctx.save(); ctx.globalAlpha = this.alpha; ctx.fillStyle = '#ff1493';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+            }
+        }
+
+        class Shard {
+            constructor(x, y, w, h, cx, cy) {
+                this.points = [{x,y}, {x:x+w, y}, {x:x+w/2, y:y+h}];
+                this.cx = x + w/2; this.cy = y + h/2;
+                const angle = Math.atan2(this.cy - cy, this.cx - cx);
+                this.vx = Math.cos(angle) * 15; this.vy = Math.sin(angle) * 15 - 5;
+                this.rot = (Math.random() - 0.5) * 0.1; this.angle = 0; this.alpha = 1;
+            }
+            update() { this.cx += this.vx; this.cy += this.vy; this.vy += 0.3; this.angle += this.rot; if(this.cy > canvas.height) this.alpha -= 0.02; }
+            draw() {
+                if (this.alpha <= 0) return;
+                ctx.save(); ctx.globalAlpha = this.alpha; ctx.translate(this.cx, this.cy); ctx.rotate(this.angle);
+                ctx.beginPath(); ctx.moveTo(this.points[0].x - this.cx, this.points[0].y - this.cy);
+                ctx.lineTo(this.points[1].x - this.cx, this.points[1].y - this.cy);
+                ctx.lineTo(this.points[2].x - this.cx, this.points[2].y - this.cy);
+                ctx.closePath(); ctx.fillStyle = 'rgba(255,20,147,0.2)'; ctx.strokeStyle = '#ff69b4'; ctx.fill(); ctx.stroke(); ctx.restore();
+            }
+        }
+
+        function drawCrackPath(path) {
+            const pts = path.points;
+            ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+            for(let i=1; i<pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+            ctx.strokeStyle = `rgba(255,105,180,${path.alpha})`; ctx.lineWidth = path.width; ctx.stroke();
+            for (const b of path.branches) drawCrackPath(b);
+        }
+
+        window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        
+        window.addEventListener('mousedown', (e) => {
+            if (isShattered || e.target.closest('#giftOverlay')) return;
+
+            mouse.isHitting = true; hitCount++; 
+            hitCounter.textContent = `⚡ ${hitCount} / ${maxHits}`;
+
+            // Pemicu audio (Hanya akan memutar lagu di klik pertama saja)
+            playCrackSound();
+
+            if (hitCount >= maxHits) {
+                isShattered = true;
+                createShatterEffect(mouse.x, mouse.y);
+                uiOverlay.style.display = 'none';
+                hitCounter.textContent = 'KEMRENNNN';
+                
+                setTimeout(() => {
+                    giftOverlay.classList.add('active');
+                    askBox.style.transform = "scale(1)";
+                }, 1200);
+            } else {
+                createCrack(mouse.x, mouse.y, hitCount/maxHits);
+            }
+        });
+        window.addEventListener('mouseup', () => { mouse.isHitting = false; });
+
+        function animate() {
+            ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (!isShattered) { for (const p of crackPaths) drawCrackPath(p); } 
+            else { for (let i = shards.length - 1; i >= 0; i--) { shards[i].update(); shards[i].draw(); if(shards[i].alpha <= 0) shards.splice(i,1); } }
+            for (let i = particles.length - 1; i >= 0; i--) { particles[i].update(); particles[i].draw(); if(particles[i].alpha <= 0) particles.splice(i,1); }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ============================================================
+        //  FUNGSI LOGIKA TOMBOL PILIHAN KADO
+        // ============================================================
+        function rejectGift() {
+            boxScale += 0.45; 
+            askBox.style.transform = `scale(${boxScale})`;
+            
+            const btnGamau = document.getElementById('btnGamau');
+            let currentSize = parseFloat(window.getComputedStyle(btnGamau).fontSize);
+            if (currentSize > 6) {
+                btnGamau.style.fontSize = (currentSize * 0.85) + 'px';
+            }
+        }
+
+        function acceptGift() {
+            giftOverlay.classList.remove('active');
+            setTimeout(() => {
+                // Sembunyikan simulasi hancur kaca sepenuhnya
+                wrapperSim.style.display = 'none';
+                
+                // Munculkan animasi bunga bawaan Anda (Lagu bruno.mp3 tetap berputar di latar belakang)
+                document.getElementById('flowerNight').style.display = 'block';
+                document.getElementById('flowerContainer').style.display = 'flex';
+
+                // tampilkan tombol back setelah bunga muncul
+                const backBtn = document.getElementById('backToLoveBtn');
+                if (backBtn) backBtn.style.display = 'inline-block';
+            }, 200);
+        }
+    </script>
+</body>
+</html>

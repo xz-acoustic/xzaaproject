@@ -1,0 +1,314 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    background-color: #91A8D0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    transition: background-color 0.5s ease;
+}
+
+/* CONTAINER LAYAR PIN */
+.phone-screen {
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    max-height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.header-zone { margin-top: 20px; }
+
+h1 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status-msg {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+    font-weight: 500;
+    min-height: 22px;
+    transition: all 0.3s ease;
+}
+
+/* Indikator Titik PIN */
+.pin-dots {
+    display: flex;
+    gap: 20px;
+    margin: 30px 0;
+    justify-content: center;
+}
+
+.dot {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dot.active {
+    background-color: #ffffff;
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(255,255,255,0.6);
+}
+
+/* Grid Tombol Angka */
+.keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 40px;
+}
+
+.key {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s ease;
+    outline: none;
+    backdrop-filter: blur(5px);
+}
+
+.key:active {
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: scale(0.9);
+}
+
+.key.action {
+    font-size: 16px;
+    font-weight: 500;
+    background-color: transparent;
+    backdrop-filter: none;
+}
+
+.key.action:active { background-color: rgba(255, 255, 255, 0.1); }
+
+/* LOVE SCREEN */
+.love-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.9);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 5;
+}
+
+.love-screen.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.love-title {
+    color: white;
+    font-size: 26px;
+    margin-bottom: 60px;
+    text-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    font-weight: 700;
+}
+
+/* Wadah 3 Love Besar */
+.love-container {
+    display: flex;
+    gap: 55px;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+    padding: 20px;
+}
+
+/* Desain Item Love */
+.big-love {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    background-color: #F7CAC9;
+    transform: rotate(-45deg);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.12));
+}
+
+.big-love::before,
+.big-love::after {
+    content: "";
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background-color: #F7CAC9;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.big-love::before { top: -35px; left: 0; }
+.big-love::after { left: 35px; top: 0; }
+
+.big-love:hover {
+    transform: rotate(-45deg) scale(1.15);
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.18));
+}
+
+.big-love:active {
+    transform: rotate(-45deg) scale(0.9);
+}
+
+/* STYLING GAME CATCH LOVE */
+#gameContainer {
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    display: none;
+    z-index: 20;
+}
+
+canvas {
+    /* serenity vibe */
+    background-color: #B3CEE5;
+    display: block;
+    transition: background-color 1s ease;
+}
+
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(179, 206, 229, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    z-index: 25;
+}
+
+.screen h1 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.screen p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    text-align: center;
+    max-width: 80%;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+}
+
+.btn {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    background-color: #ff4d6d;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s, background-color 0.2s;
+    width: 220px;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #ff758f;
+    transform: scale(1.05);
+}
+
+.btn.btn-home {
+    background-color: #4a6fa5;
+}
+
+.btn.btn-home:hover {
+    background-color: #638ab4;
+}
+
+.hide {
+    display: none !important;
+}
+
+/* SISTEM HUJAN LOVE KECIL */
+.falling-love {
+    position: absolute;
+    top: -20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.7; }
+    100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ANIMASI SHAKE */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+}
+
+.shake { animation: shake 0.4s ease-in-out; }
+

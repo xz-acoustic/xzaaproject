@@ -1,0 +1,653 @@
+// === KONFIGURASI DAN STATE PIN ===
+const CORRECT_PIN = "1707";
+let currentPin = "";
+let rainInterval;
+
+const dots = document.querySelectorAll('.dot');
+const statusMsg = document.getElementById('statusMsg');
+const pinScreen = document.getElementById('pinScreen');
+const loveScreen = document.getElementById('loveScreen');
+
+// === AUDIO SYNTHESIZER ENGINE ===
+function playSound(type) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'success') {
+        // Suara PIN Benar
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.start(); osc.stop(ctx.currentTime + 0.4);
+    } else if (type === 'error') {
+        // Suara PIN Salah
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(130, ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+    } else if (type === 'pop') {
+        // Klik Love Utama
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+        osc.start(); osc.stop(ctx.currentTime + 0.08);
+    } else if (type === 'catch_love') {
+        // Dapat Love di Game
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+        osc.start(); osc.stop(ctx.currentTime + 0.12);
+    } else if (type === 'hit_bomb') {
+        // Kena Bom / Miss Love
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(180, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(60, ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.22);
+        osc.start(); osc.stop(ctx.currentTime + 0.22);
+    } else if (type === 'game_win') {
+        // Nada Menang Game
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+            const oscW = ctx.createOscillator();
+            const gainW = ctx.createGain();
+            oscW.connect(gainW);
+            gainW.connect(ctx.destination);
+            oscW.frequency.setValueAtTime(freq, ctx.currentTime + (idx * 0.1));
+            gainW.gain.setValueAtTime(0.15, ctx.currentTime + (idx * 0.1));
+            gainW.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + (idx * 0.1) + 0.3);
+            oscW.start(ctx.currentTime + (idx * 0.1));
+            oscW.stop(ctx.currentTime + (idx * 0.1) + 0.3);
+        });
+    } else if (type === 'game_over') {
+        // Nada Game Over
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.4);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
+        osc.start(); osc.stop(ctx.currentTime + 0.45);
+    } else {
+        // Tombol Klik Biasa
+        osc.frequency.setValueAtTime(450, ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+        osc.start(); osc.stop(ctx.currentTime + 0.05);
+    }
+}
+
+function updateDots() {
+    dots.forEach((dot, index) => {
+        if (index < currentPin.length) dot.classList.add('active');
+        else dot.classList.remove('active');
+    });
+}
+
+function pressNum(num) {
+    if (currentPin.length >= 4) return;
+    playSound('click');
+    currentPin += num;
+    updateDots();
+
+    if (currentPin.length === 4) {
+        setTimeout(checkPin, 250);
+    }
+}
+
+function pressDelete() {
+    if (currentPin.length > 0) {
+        playSound('click');
+        currentPin = currentPin.slice(0, -1);
+        updateDots();
+    }
+}
+
+function checkPin() {
+    if (currentPin === CORRECT_PIN) {
+        playSound('success');
+        pinScreen.style.opacity = "0";
+        pinScreen.style.transform = "scale(1.1)";
+
+        setTimeout(() => {
+            pinScreen.style.display = "none";
+            loveScreen.style.display = "flex";
+            setTimeout(() => loveScreen.classList.add('active'), 50);
+            startLoveRain();
+        }, 400);
+    } else {
+        playSound('error');
+        pinScreen.classList.add('shake');
+        statusMsg.innerText = "YAHH! KOK SALAH SI😤";
+        statusMsg.style.color = "#E74C3C";
+
+        setTimeout(() => {
+            pinScreen.classList.remove('shake');
+            currentPin = "";
+            updateDots();
+        }, 400);
+    }
+}
+
+function createDroplet() {
+    const loveIcons = ['❤️', '💖', '💝', '💕', '💗', '🌸'];
+    const droplet = document.createElement('div');
+    droplet.classList.add('falling-love');
+    droplet.innerText = loveIcons[Math.floor(Math.random() * loveIcons.length)];
+    droplet.style.left = Math.random() * 100 + 'vw';
+    droplet.style.fontSize = Math.random() * 15 + 12 + 'px';
+    droplet.style.animationDuration = Math.random() * 3 + 3 + 's';
+
+    document.body.appendChild(droplet);
+    setTimeout(() => { droplet.remove(); }, 6000);
+}
+
+function startLoveRain() {
+    if (!rainInterval) {
+        rainInterval = setInterval(createDroplet, 150);
+    }
+}
+
+function clickBigLove(id) {
+    playSound('pop');
+
+    if (id === 1) {
+        clearInterval(rainInterval);
+        rainInterval = null;
+
+        loveScreen.classList.remove('active');
+        loveScreen.style.opacity = "0";
+        loveScreen.style.pointerEvents = "none";
+
+        setTimeout(() => {
+            loveScreen.style.display = "none";
+            document.body.style.backgroundColor = "#B3CEE5";
+            const gameCont = document.getElementById('gameContainer');
+            gameCont.style.display = "block";
+            startScreen.classList.remove('hide');
+            endScreen.classList.add('hide');
+        }, 400);
+
+    } else if (id === 3) {
+        // LOVE BESAR NOMOR 3 -> tambah blooming flower
+        const ucapan = ["LUVVVVVVVVVVVVVVV", "BLOOMING NIHHH", "HEHEHEHE✨"];
+        document.querySelector('.love-title').innerText = ucapan[Math.floor(Math.random() * ucapan.length)];
+
+        // stop hujan kecil kalau masih ada
+        if (rainInterval) {
+            clearInterval(rainInterval);
+            rainInterval = null;
+        }
+
+        // animasi bunga muncul cepat sebelum game
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                createMagicalFlower();
+            }, i * 60);
+        }
+
+        // tetap kasih rain love sedikit biar berasa
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createDroplet, i * 50);
+        }
+
+    } else {
+        const ucapan = ["UDAH MAIN GAME BELUM", "ANEH GA?"];
+        document.querySelector('.love-title').innerText = ucapan[Math.floor(Math.random() * ucapan.length)];
+        for (let i = 0; i < 8; i++) {
+            setTimeout(createDroplet, i * 50);
+        }
+}
+
+    }
+
+// =======================================================
+// === ENGINE GAME CAPTURE LOVE ===
+// =======================================================
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const startScreen = document.getElementById('startScreen');
+const endScreen = document.getElementById('endScreen');
+const endTitle = document.getElementById('endTitle');
+const endMessage = document.getElementById('endMessage');
+
+let score = 0;
+let lives = 3;
+let gameOver = false;
+let gameActive = false;
+let items = [];
+const targetScore = 15;
+const BASE_ITEM_SPEED = 2.3;
+
+let flowers = [];
+let lights = [];
+let isWinningScreen = false;
+let spawnTimeout;
+
+const basket = {
+    x: canvas.width / 2 - 50,
+    y: canvas.height - 50,
+    width: 100,
+    height: 38,
+    speed: 8
+};
+
+let rightPressed = false;
+let leftPressed = false;
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Right' || e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') rightPressed = true;
+    if (e.key === 'Left' || e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') leftPressed = true;
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'Right' || e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') rightPressed = false;
+    if (e.key === 'Left' || e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') leftPressed = false;
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (!gameActive && !isWinningScreen) return;
+    const rect = canvas.getBoundingClientRect();
+    const root = document.documentElement;
+    const mouseX = e.clientX - rect.left - root.scrollLeft;
+    basket.x = mouseX - basket.width / 2;
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    if (!gameActive && !isWinningScreen) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const root = document.documentElement;
+    const touchX = touch.clientX - rect.left - root.scrollLeft;
+    basket.x = touchX - basket.width / 2;
+}, { passive: false });
+
+function spawnItem() {
+    if (gameOver || !gameActive) return;
+
+    const type = Math.random() < 0.25 ? 'bomb' : 'love';
+    const radius = type === 'love' ? 15 : 12;
+    const x = Math.random() * (canvas.width - radius * 2) + radius;
+    const speed = BASE_ITEM_SPEED;
+
+    items.push({ x, y: -20, type, radius, speed });
+
+    const nextSpawn = Math.random() * 600 + 600;
+    spawnTimeout = setTimeout(spawnItem, nextSpawn);
+}
+
+function drawBasket() {
+    ctx.save();
+    let basketGrad = ctx.createLinearGradient(basket.x, basket.y, basket.x, basket.y + basket.height);
+    basketGrad.addColorStop(0, '#A0522D');
+    basketGrad.addColorStop(1, '#5C2E16');
+
+    ctx.fillStyle = basketGrad;
+    ctx.beginPath();
+    ctx.roundRect(basket.x, basket.y, basket.width, basket.height, [2, 2, 18, 18]);
+    ctx.fill();
+
+    ctx.strokeStyle = '#D2B48C';
+    ctx.lineWidth = 1.5;
+
+    const rows = 5;
+    const columns = 12;
+    const rowHeight = basket.height / rows;
+    const colWidth = basket.width / columns;
+
+    for (let i = 1; i < rows; i++) {
+        ctx.beginPath();
+        ctx.strokeStyle = i % 2 === 0 ? 'rgba(210, 180, 140, 0.4)' : 'rgba(92, 46, 22, 0.5)';
+        ctx.moveTo(basket.x, basket.y + (i * rowHeight));
+        ctx.lineTo(basket.x + basket.width, basket.y + (i * rowHeight));
+        ctx.stroke();
+    }
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if ((r + c) % 2 === 0) {
+                ctx.strokeStyle = 'rgba(238, 217, 187, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(basket.x + (c * colWidth) + (colWidth / 2), basket.y + (r * rowHeight));
+                ctx.lineTo(basket.x + (c * colWidth) + (colWidth / 2), basket.y + ((r + 1) * rowHeight));
+                ctx.stroke();
+            } else {
+                ctx.strokeStyle = 'rgba(64, 30, 12, 0.6)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(basket.x + (c * colWidth), basket.y + (r * rowHeight) + (rowHeight / 2));
+                ctx.lineTo(basket.x + ((c + 1) * colWidth), basket.y + (r * rowHeight) + (rowHeight / 2));
+                ctx.stroke();
+            }
+        }
+    }
+
+    let rimGrad = ctx.createLinearGradient(basket.x, basket.y - 4, basket.x, basket.y + 4);
+    rimGrad.addColorStop(0, '#CD853F');
+    rimGrad.addColorStop(1, '#8B4513');
+
+    ctx.fillStyle = rimGrad;
+    ctx.beginPath();
+    ctx.roundRect(basket.x - 3, basket.y - 2, basket.width + 6, 6, 3);
+    ctx.fill();
+
+    ctx.strokeStyle = '#5C2E16';
+    ctx.lineWidth = 1;
+    for (let xPos = basket.x; xPos <= basket.x + basket.width; xPos += 8) {
+        ctx.beginPath();
+        ctx.moveTo(xPos, basket.y - 2);
+        ctx.lineTo(xPos + 4, basket.y + 4);
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+function drawLove(x, y, size) {
+    ctx.save();
+    ctx.font = `${size}px Arial, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('❤️', x, y);
+    ctx.restore();
+}
+
+function drawBomb(x, y, radius) {
+    ctx.fillStyle = '#222222';
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#555555';
+    ctx.fillRect(x - 4, y - radius - 4, 8, 5);
+
+    ctx.strokeStyle = '#ffb703';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x, y - radius - 4);
+    ctx.quadraticCurveTo(x + 5, y - radius - 10, x + 8, y - radius - 8);
+    ctx.stroke();
+}
+
+function drawUI() {
+    ctx.fillStyle = '#333333';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.fillText(`Skor: ${score} / ${targetScore}`, 20, 35);
+
+    ctx.fillText('Nyawa: ', canvas.width - 130, 35);
+    ctx.fillStyle = '#ff4d6d';
+    for (let i = 0; i < lives; i++) {
+        ctx.fillText('❤️', canvas.width - 65 + (i * 20), 35);
+    }
+}
+
+function createMagicalFlower() {
+    const xBase = Math.random() * (canvas.width - 120) + 60;
+    const targetHeight = Math.random() * 150 + 200;
+
+    flowers.push({
+        x: xBase,
+        y: canvas.height,
+        currentHeight: 0,
+        maxHeight: targetHeight,
+        bloomProgress: 0,
+        curveX: (Math.random() - 0.5) * 60,
+        color: Math.random() < 0.5 ? '#a18cd1' : '#fbc2eb',
+        leafAngle: Math.random() < 0.5 ? -1 : 1
+    });
+}
+
+function drawMagicalFlower(f) {
+    ctx.save();
+    ctx.strokeStyle = '#1a4329';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(f.x, f.y);
+
+    const topY = f.y - f.currentHeight;
+    const midY = f.y - (f.currentHeight / 2);
+    const midX = f.x + (f.curveX * (f.currentHeight / f.maxHeight));
+    const topX = f.x + f.curveX;
+
+    ctx.bezierCurveTo(midX, midY, midX, midY, topX, topY);
+    ctx.stroke();
+
+    if (f.currentHeight > f.maxHeight * 0.5) {
+        ctx.fillStyle = '#225e39';
+        ctx.save();
+        ctx.translate(midX, midY);
+        ctx.rotate(f.leafAngle * 0.6);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 7, 18, Math.PI / 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    if (f.currentHeight >= f.maxHeight) {
+        if (f.bloomProgress < 1) f.bloomProgress += 0.015;
+        ctx.translate(topX, topY);
+
+        const maxRadius = 24;
+        const currentSize = maxRadius * f.bloomProgress;
+        const spreadAngle = 0.55 * f.bloomProgress;
+
+        ctx.fillStyle = f.color;
+        ctx.save();
+        ctx.rotate(-spreadAngle);
+        ctx.beginPath();
+        ctx.ellipse(-currentSize * 0.4, -currentSize * 0.6, currentSize * 0.45, currentSize, -0.1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.rotate(spreadAngle);
+        ctx.beginPath();
+        ctx.ellipse(currentSize * 0.4, -currentSize * 0.6, currentSize * 0.45, currentSize, 0.1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.fillStyle = f.color === '#a18cd1' ? '#fbc2eb' : '#ff9a9e';
+        ctx.beginPath();
+        ctx.ellipse(0, -currentSize * 0.65, currentSize * 0.65, currentSize * 1.05, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(0, -currentSize * 0.55, currentSize * 0.22, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+    }
+    ctx.restore();
+}
+
+function updateAndDrawLights() {
+    if (Math.random() < 0.1 && lights.length < 40) {
+        lights.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * (canvas.height - 100),
+            radius: Math.random() * 2 + 1,
+            alpha: 1,
+            speedY: Math.random() * 0.5 + 0.2,
+            fadeSpeed: Math.random() * 0.01 + 0.005
+        });
+    }
+
+    lights.forEach((l, index) => {
+        l.y -= l.speedY;
+        l.alpha -= l.fadeSpeed;
+        if (l.alpha <= 0) {
+            lights.splice(index, 1);
+            return;
+        }
+        ctx.save();
+        ctx.globalAlpha = l.alpha;
+        ctx.beginPath();
+        ctx.arc(l.x, l.y, l.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#fffa65';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#fffa65';
+        ctx.fill();
+        ctx.restore();
+    });
+}
+
+function update() {
+    if (gameOver) return;
+
+    if (rightPressed && basket.x < canvas.width - basket.width) basket.x += basket.speed;
+    if (leftPressed && basket.x > 0) basket.x -= basket.speed;
+
+    if (basket.x < 0) basket.x = 0;
+    if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
+
+    for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        item.y += item.speed;
+
+        const hitX = item.x >= basket.x && item.x <= basket.x + basket.width;
+        const hitY = item.y + item.radius >= basket.y && item.y <= basket.y + basket.height;
+
+        if (hitX && hitY) {
+            if (item.type === 'love') {
+                score++;
+                playSound('catch_love');
+                if (score >= targetScore) endGame(true);
+            } else if (item.type === 'bomb') {
+                lives--;
+                playSound('hit_bomb');
+                if (lives <= 0) endGame(false);
+            }
+            items.splice(i, 1);
+            continue;
+        }
+
+        if (item.y - item.radius > canvas.height) {
+            if (item.type === 'love') {
+                lives--;
+                playSound('hit_bomb');
+                if (lives <= 0) endGame(false);
+            }
+            items.splice(i, 1);
+        }
+    }
+}
+
+function draw() {
+    if (isWinningScreen) {
+        ctx.fillStyle = '#010a15';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        updateAndDrawLights();
+
+        if (Math.random() < 0.03 && flowers.length < 15) {
+            createMagicalFlower();
+        }
+
+        flowers.forEach(f => {
+            if (f.currentHeight < f.maxHeight) f.currentHeight += 3;
+            drawMagicalFlower(f);
+        });
+    } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    if (!gameOver) {
+        items.forEach(item => {
+            if (item.type === 'love') drawLove(item.x, item.y, 30);
+            else drawBomb(item.x, item.y, item.radius);
+        });
+    }
+
+    if (!isWinningScreen) {
+        drawBasket();
+        drawUI();
+    }
+}
+
+function gameLoop() {
+    if (!gameActive && !isWinningScreen) return;
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+function startGame() {
+    playSound('click');
+    clearTimeout(spawnTimeout);
+    score = 0;
+    lives = 3;
+    items = [];
+    flowers = [];
+    lights = [];
+    gameOver = false;
+    gameActive = true;
+    isWinningScreen = false;
+
+    startScreen.classList.add('hide');
+    endScreen.classList.add('hide');
+
+    basket.x = canvas.width / 2 - basket.width / 2;
+
+    spawnItem();
+    gameLoop();
+}
+
+function endGame(isWin) {
+    gameOver = true;
+    gameActive = false;
+    clearTimeout(spawnTimeout);
+    endScreen.classList.remove('hide');
+
+    if (isWin) {
+        isWinningScreen = true;
+        playSound('game_win');
+        endTitle.innerText = "YASHHH, KEMREN NAPISS🎉";
+        endMessage.innerText = `kamu dapet ${score} poin NAPISSSS.`;
+        gameLoop();
+    } else {
+        playSound('game_over');
+        endTitle.innerText = "YAHHH:(";
+        endMessage.innerText = `Ulang ah, skormu masih ${score}`;
+    }
+}
+
+// === FUNGSI TOMBOL HOME (KEMBALI KE LAYAR MENU UTAMA) ===
+function backToHome() {
+    playSound('click');
+    gameOver = true;
+    gameActive = false;
+    isWinningScreen = false;
+    clearTimeout(spawnTimeout);
+
+    // Sembunyikan wadah game
+    document.getElementById('gameContainer').style.display = "none";
+
+    // Kembalikan background utama & tampilkan love menu
+    document.body.style.backgroundColor = "#91A8D0";
+    document.querySelector('.love-title').innerText = "Mau pilih yang mana";
+    loveScreen.style.display = "flex";
+
+    setTimeout(() => {
+        loveScreen.classList.add('active');
+        loveScreen.style.opacity = "1";
+        loveScreen.style.pointerEvents = "auto";
+        startLoveRain();
+    }, 50);
+}
+
+// expose untuk inline onclick di HTML
+window.pressNum = pressNum;
+window.pressDelete = pressDelete;
+window.startGame = startGame;
+window.backToHome = backToHome;
+window.clickBigLove = clickBigLove;
+
